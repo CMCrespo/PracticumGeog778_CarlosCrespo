@@ -1,5 +1,5 @@
 <?php
-include 'C:/MAMP/htdocs/Practicum/cartoDBProxy.php';
+include 'C:/MAMP/htdocs/PracticumGeog778_CarlosCrespo/cartoDBProxy.php';
 //			^CHANGE THIS TO THE PATH TO YOUR cartodbProxy.php
 $queryURL = $_POST['qurl'];
 $return = goProxy($queryURL);
