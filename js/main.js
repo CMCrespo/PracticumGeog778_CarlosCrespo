@@ -668,7 +668,7 @@ function setDataPol() {
 
 // Submit data to the PHP using a jQuery Post method
 var submitToProxy = function(q){
-  $.post("C:/MAMP/htdocs/Practicum/php/callProxy.php", { // <--- Enter the path to your callProxy.php file here
+  $.post("C:/MAMP/htdocs/PracticumGeog778_CarlosCrespo/php/callProxy.php", { // <--- Enter the path to your callProxy.php file here
     qurl:q,
     cache: false,
     timeStamp: new Date().getTime()
