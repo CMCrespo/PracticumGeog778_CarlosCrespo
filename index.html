@@ -45,7 +45,7 @@
                 
         <div id="feedback">
             <center>
-            <label>Initiate Report</label></br><p>
+            <label>Initiate Report</label><br><p>
             <input type="button" onclick="startEditsPol('pol')" value="Start Pollution Report">
             <input type="button" onclick="stopEdits()" value="Stop Pollution Report"></p><p>
             <input type="button" onclick="startEditsPol('aton')" value="Start ATON Report">
@@ -57,37 +57,37 @@
         
         <div id="layers" title="Layers">
             <center>
-            <label>Select Layers</label></br>
+            <label>Select Layers</label><br>
             </center>
-			<input type="checkbox" name="filter" value="aton"> Aids to Navigation</input></br>
-			<input type="checkbox" name="filter" value="boundary"> USCG/EPA Jurisdictional Boundary</input></br>
-			<input type="checkbox" name="filter" value="mep"> Pollution Reports</input></br>
+			<input type="checkbox" name="filter" value="aton"> Aids to Navigation</input><br>
+			<input type="checkbox" name="filter" value="boundary"> USCG/EPA Jurisdictional Boundary</input><br>
+			<input type="checkbox" name="filter" value="mep"> Pollution Reports</input><br>
 			<input type="checkbox" name="filter" value="facilities"> Facilities</input>
 		</div>
         <div id="queries" title="Aton Status">
             <center>
-            <label>Aton Status</label></br>
+            <label>Aton Status</label><br>
             </center>
-            <input type="radio" name="filter" value="AtonFA"> Full Availability</input></br>
-			<input type="radio" name="filter" value="AtonPA"> Partial Availability</input></br>
+            <input type="radio" name="filter" value="AtonFA"> Full Availability</input><br>
+			<input type="radio" name="filter" value="AtonPA"> Partial Availability</input><br>
 			<input type="radio" name="filter" value="AtonNA"> No Availability</input>
         </div>
         
         <div id="queries2" title="Facility Status">
             <center>
-            <label>Facility Status</label></br>
+            <label>Facility Status</label><br>
             </center>
-            <input type="radio" name="filter" value="FacFA"> Full Availability</input></br>
-			<input type="radio" name="filter" value="FacPA"> Partial Availability</input></br>
+            <input type="radio" name="filter" value="FacFA"> Full Availability</input><br>
+			<input type="radio" name="filter" value="FacPA"> Partial Availability</input><br>
 			<input type="radio" name="filter" value="FacNA"> No Availability</input>
         </div>
 
         <div id="queries3" title="Pollution Status">
             <center>
-            <label>Pollution Status</label></br>
+            <label>Pollution Status</label><br>
             </center>
-            <input type="radio" name="filter" value="inprogress"> Clean-up In Progress</input></br>
-			<input type="radio" name="filter" value="required"> Clean-up Required</input></br>
+            <input type="radio" name="filter" value="inprogress"> Clean-up In Progress</input><br>
+			<input type="radio" name="filter" value="required"> Clean-up Required</input><br>
 			<input type="radio" name="filter" value="notrequired"> Clean-up Not Required/Completed</input>
         </div>
         
@@ -95,36 +95,36 @@
             <form id="pol-report_form">
                 <fieldset>
                     <label for="mepname">Name</label>
-                    <input type="text" name="mepname" id="mepname" placeholder="Enter Spill Name" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="mepname" id="mepname" placeholder="Enter Spill Name" class="text ui-widget-content ui-corner-all"><br>
                     <label for="meptarget_div">Target Division</label>
-                    <input type="text" name="meptarget_div" id="meptarget_div" placeholder="Division" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="meptarget_div" id="meptarget_div" placeholder="Division" class="text ui-widget-content ui-corner-all"><br>
                     <label for="mepteam">Team</label>
-                    <input type="text" name="mepteam" id="mepteam" placeholder="Response Team" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="mepteam" id="mepteam" placeholder="Response Team" class="text ui-widget-content ui-corner-all"><br>
                     <label for="meplocation">Location</label>
-                    <input type="text" name="meplocation" id="meplocation" placeholder="Spill Location" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="meplocation" id="meplocation" placeholder="Spill Location" class="text ui-widget-content ui-corner-all"><br>
                     <label for="mepdescription">Description</label>
-                    <input type="text" name="mepdescription" id="mepdescription" placeholder="Description" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="mepdescription" id="mepdescription" placeholder="Description" class="text ui-widget-content ui-corner-all"><br>
                     <label for="mep_product">Select Product</label>
                     <select id="mep_product" name="mep_product">
                         <option value="oil">Oil</option>
                         <option value="hazmat">HAZMAT</option>                         
-                    </select></br>
+                    </select><br>
                 
                     <label for="mepactual_pot">Potential</label>
-                    <input type="text" name="mepactual_pot" id="mepactual_pot" placeholder="Spill Potential" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="mepactual_pot" id="mepactual_pot" placeholder="Spill Potential" class="text ui-widget-content ui-corner-all"><br>
                     <label for="mepquantity">Quantity</label>
-                    <input type="text" name="mepquantity" id="mepquantity" placeholder="Quantity" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="mepquantity" id="mepquantity" placeholder="Quantity" class="text ui-widget-content ui-corner-all"><br>
                     <label for="mepstatus">Status</label>
                     <select id="mepstatus" name="mepstatus">
                         <option value="Progress">Clean-up In Progress</option>
                         <option value="Required">Clean-up Required</option>
                         <option value="Completed">Clean-up Not Required/Completed</option>
-                    </select></br>
+                    </select><br>
                 
                     <label for="mepresources">Resources Needed</label>
-                    <input type="text" name="mepresources" id="mepresources" placeholder="Resources Needed" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="mepresources" id="mepresources" placeholder="Resources Needed" class="text ui-widget-content ui-corner-all"><br>
                     <label for="meparea_con">Area of Concern</label>
-                    <input type="text" name="meparea_con" id="meparea_con" placeholder="Media, political, etc." class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="meparea_con" id="meparea_con" placeholder="Media, political, etc." class="text ui-widget-content ui-corner-all"><br>
                     <label for="mepoperational">Operational Risk</label>
                     <input type="text" name="mepoperational" id="mepoperational" placeholder="Operational Risk" class="text ui-widget-content ui-corner-all">
   
@@ -136,16 +136,16 @@
             <form id="aton-report_form">
                 <fieldset>
                     <label for="atonname">Name</label>
-                    <input type="text" name="aton_name" id="aton_name" placeholder="ATON Name" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="aton_name" id="aton_name" placeholder="ATON Name" class="text ui-widget-content ui-corner-all"><br>
                     <label for="aton_summary">Summary</label>
-                    <input type="text" name="aton_summary" id="aton_summary" placeholder="Summary" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="aton_summary" id="aton_summary" placeholder="Summary" class="text ui-widget-content ui-corner-all"><br>
                     <label for="aton_status">Status</label>
                     <select id="aton_status" name="aton_status">
                         <option value="Available">Full Availability</option>
                         <option value="Partial">Partial Availability</option>
                         <option value="Not_Available">No Availability</option>
-                    </select></br>
-                <!--    <input type="text" name="mepstatus" id="mepstatus" placeholder="Response Status" class="text ui-widget-content ui-corner-all"></br> -->
+                    </select><br>
+                <!--    <input type="text" name="mepstatus" id="mepstatus" placeholder="Response Status" class="text ui-widget-content ui-corner-all"><br> -->
                      
                     <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
                 </fieldset>
@@ -157,15 +157,15 @@
             <form>
                 <fieldset>
                     <label for="fac_name">Name</label>
-                    <input type="text" name="fac_name" id="fac_name" placeholder="Facility Name" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="fac_name" id="fac_name" placeholder="Facility Name" class="text ui-widget-content ui-corner-all"><br>
                     <label for="fac_summary">Summary</label>
-                    <input type="text" name="fac_summary" id="fac_summary" placeholder="Summary" class="text ui-widget-content ui-corner-all"></br>
+                    <input type="text" name="fac_summary" id="fac_summary" placeholder="Summary" class="text ui-widget-content ui-corner-all"><br>
                     <label for="fac_status">Status</label>
                     <select id="fac_status" name="fac_status">
                         <option value="Operational">Fully Operational</option>
                         <option value="Partial_Ops">Partial Operations</option>
                         <option value="Not_Operational">Not Operational</option>
-                    </select></br>
+                    </select><br>
                     <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
                 </fieldset>
             </form>
@@ -181,5 +181,5 @@
         <script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
         <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
         <script src="js/main.js"></script>
-	</body>
+	
 </html>
