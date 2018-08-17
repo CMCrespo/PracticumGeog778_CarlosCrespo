@@ -24,7 +24,7 @@ var sqlFacilities = "SELECT * FROM facilities";
 
 //set var for queries
 var sqlPolStatusProgress = "SELECT * FROM mep WHERE status='Clean-up In Progress'";
-var sqlPolStatusNotReq = "SELECT * FROM mep WHERE status='Clean-up Not Required'";
+var sqlPolStatusNotReq = "SELECT * FROM mep WHERE status='Clean-up Not Required/Completed'";
 var sqlPolStatusReq = "SELECT * FROM mep WHERE status='Clean-up Required'";
 
 var sqlAtonStatusFA = "SELECT * FROM aton WHERE status='FA'";
@@ -576,11 +576,10 @@ var atonReportDialog = $("#aton-report_dialog").dialog({
         of: "#map"
     },
    buttons: {
-       "Add to Database": function() {
-            console.log('yo!');   
-       },
+       "Add to Database": setDataATON,
        Cancel: function() {
            atonReportDialog.dialog("close");
+       
        }
    },
     close: function () {
@@ -611,13 +610,13 @@ function setDataPol() {
     var mepOpRisk = document.getElementById("mepoperational").value;
     //console.log(mepName, mepDivsion, mepTeam, mepLocation, mepDescription, mepProduct,mepPotential,mepQuantity,   mepStatus, mepResources,mepAreaConcern,mepOpRisk);
     drawnItems.eachLayer(function (layer) {
-        var postSQL = "INSERT INTO mep (the_geom, name, target_div, team, location, description, oil_hazmat, actual_pot, quantity, status, resources, area_con, operational, latitude, longitude) VALUES (ST_SetSRID(ST_GeomFromGeoJSON('";
         var a = layer.getLatLng();
-        var postSQL2 = '{"type":"Point","coordinates":[' + a.lng + "," + a.lat + "]}'),4326),'" +"'"+ mepName +"'"+","+"'"+ mepDivsion  +"'"+","+"'"+ mepTeam +"'"+","+"'"+ mepLocation +"'"+","+"'"+ mepDescription +"'"+","+"'"+ mepProduct +"'"+ ","+"'"+ mepPotential +"'"+","+"'" + mepQuantity +"'"+","+"'"+ mepStatus +"'"+","+"'"+ mepResources +"'"+","+"'"+ mepAreaConcern +"'"+","+"'"+ mepOpRisk +"'"+","+"'"+ a.lat +"'"+","+"'"+ a.lng +"')";
-        var pURL = postSQL + postSQL2;
-        submitToProxy(pURL); 
-        //console.log(pURL);
-        console.log("Feature has been submitted to the Proxy");
+        var postSQL = "INSERT INTO mep (the_geom, name, target_div, team, location, description, oil_hazmat, actual_pot, quantity, status, resources, area_conce, operational, latitude, longitude) VALUES (ST_GeomFromText('POINT(" + a.lng + " " + a.lat + ")',4326)," + "'"+ mepName +"'"+","+"'"+ mepDivsion  +"'"+","+"'"+ mepTeam +"'"+","+"'"+ mepLocation +"'"+","+"'"+ mepDescription +"'"+","+"'"+ mepProduct +"'"+ ","+"'"+ mepPotential +"'"+","+"'" + mepQuantity +"'"+","+"'"+ mepStatus +"'"+","+"'"+ mepResources +"'"+","+"'"+ mepAreaConcern +"'"+","+"'"+ mepOpRisk +"'"+","+"'"+ a.lat +"'"+","+"'"+ a.lng +"')";
+        var pURL = postSQL;
+        postURL = "https://"+cartoDBUserName+".carto.com/api/v2/sql?q=" + pURL + "&api_key=RlncOhycG7l-UeqxOam90w";
+            $.post(postURL)        
+        console.log(postURL);
+        
         
     });
     map.removeLayer(drawnItems);
@@ -627,24 +626,24 @@ function setDataPol() {
 }
 
 //set parameters to post to db
-//function setDataATON() {
-//    var atonName = document.getElementById("aton_name").value;
-//    var atonSummary = document.getElementById("aton_summary").value;
-//    var atonStatus = document.getElementById("aton_status").value;
-//    drawnItems.eachLayer(function (layer) {
-//        var postSQLaton = "INSERT INTO aton (the_geom, name, summary, status, latitude, longitude) VALUES (ST_SetSRID(ST_GeomFromGeoJSON('";
-//        var a = layer.getLatLng();
-//        var postSQL2aton = '{"type":"Point","coordinates":[' + a.lng + "," + a.lat + "]}'),4326),'" +"'"+ atonName +"'"+","+"'"+ atonSummary  +"'"+","+"'"+ atonStatus +"'"+","+"'"+ a.lat +"'"+","+"'"+ a.lng +"')";
-//        var pURLaton = postSQLaton + postSQL2aton;
-//        submitToProxy(pURLaton); 
-//        console.log("Feature has been submitted to the Proxy");
-//        
-//    });
-//    map.removeLayer(drawnItems);
-//    drawnItems = new L.FeatureGroup();
-//    console.log("drawnItems has been cleared");
-//    dialog.dialog("close");
-//}
+function setDataATON() {
+    var atonName = document.getElementById("aton_name").value;
+    var atonSummary = document.getElementById("aton_summary").value;
+    var atonStatus = document.getElementById("aton_status").value;
+    drawnItems.eachLayer(function (layer) {
+        var a = layer.getLatLng();
+        var postSQLaton = "INSERT INTO aton (the_geom, name, summary, status, latitude, longitude) VALUES (ST_GeomFromText('POINT(" + a.lng + " " + a.lat + ")',4326)," +"'"+ atonName +"'"+","+"'"+ atonSummary  +"'"+","+"'"+ atonStatus +"'"+","+"'"+ a.lat +"'"+","+"'"+ a.lng +"')";
+        var pURLaton = postSQLaton; 
+        postURLaton = "https://"+cartoDBUserName+".carto.com/api/v2/sql?q=" + pURLaton + "&api_key=RlncOhycG7l-UeqxOam90w";
+            $.post(postURLaton)        
+        console.log(postURLaton);
+        
+    });
+    map.removeLayer(drawnItems);
+    drawnItems = new L.FeatureGroup();
+    console.log("drawnItems has been cleared");
+    atonReportDialog.dialog("close");
+}
 
 //set parameters to post to db
 //function setDataFac() {
@@ -667,24 +666,24 @@ function setDataPol() {
 //}
 
 // Submit data to the PHP using a jQuery Post method
-var submitToProxy = function(q){
-  $.post("C:/MAMP/htdocs/PracticumGeog778_CarlosCrespo/php/callProxy.php", { // <--- Enter the path to your callProxy.php file here
-    qurl:q,
-    cache: false,
-    timeStamp: new Date().getTime()
-  }, function(data) {
-    console.log(data);
-    refreshLayer();
-  });
-};
-
-// refresh the layers to show the updated dataset
-function refreshLayer() {
-  if (map.hasLayer(mep)) {
-    map.removeLayer(mep);
-  };
-  getGeoJSON();
-};
+//var submitToProxy = function(q){
+//  $.post("C:/MAMP/htdocs/PracticumGeog778_CarlosCrespo/php/callProxy.php", { // <--- Enter the path to your callProxy.php file here
+//    qurl:q,
+//    cache: false,
+//    timeStamp: new Date().getTime()
+//  }, function(data) {
+//    console.log(data);
+//    refreshLayer();
+//  });
+//};
+//
+//// refresh the layers to show the updated dataset
+//function refreshLayer() {
+//  if (map.hasLayer(mep)) {
+//    map.removeLayer(mep);
+//  };
+//  getGeoJSON();
+//};
 
 //$(document).ready(function() {
 //    showFacilities(),
