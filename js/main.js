@@ -2,10 +2,10 @@
 /* Carlos M. Crespo - 2018 - Geog 778 Practicum */
 
 var satellite = L.tileLayer('https://api.mapbox.com/styles/v1/ccrespo/cjjdaxeig7so12sn0ntyx8xoo/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiY2NyZXNwbyIsImEiOiJjaXNkd3lzdTQwMDd4Mnl2b3V2cTBmbnUzIn0.d7wSdKZ3KwqoXSGAByFYrw', {
-   attribution: 'Data: U.S. Coast Guard</a>, Design - Carlos M. Crespo, 2018; Map: <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
+   attribution: 'Data: U.S. Coast Guard</a>, Design - Carlos M. Crespo, 2018; Map: <a href="https://www.mapbox.com">© Mapbox</a>'
    }),
-outdoors = L.tileLayer('https://api.mapbox.com/styles/v1/ccrespo/cjj6go1v61fk12rns1a2g6ml3/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2NyZXNwbyIsImEiOiJjaXNkd3lzdTQwMDd4Mnl2b3V2cTBmbnUzIn0.d7wSdKZ3KwqoXSGAByFYrw', {
-   attribution: 'Data: U.S. Coast Guard</a>, Design - Carlos M. Crespo, 2018; Map: <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
+outdoors = L.tileLayer('https://api.mapbox.com/styles/v1/ccrespo/cjkzt2g5z2p722rldfdb9g0ua/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiY2NyZXNwbyIsImEiOiJjaXNkd3lzdTQwMDd4Mnl2b3V2cTBmbnUzIn0.d7wSdKZ3KwqoXSGAByFYrw', {
+   attribution: 'Data: U.S. Coast Guard</a>, Design - Carlos M. Crespo, 2018; Map: <a href="https://www.mapbox.com">© Mapbox</a>'
    });
 
 //create the map
@@ -31,9 +31,9 @@ var sqlAtonStatusFA = "SELECT * FROM aton WHERE status='FA'";
 var sqlAtonStatusNA = "SELECT * FROM aton WHERE status='NA'";
 var sqlAtonStatusPA = "SELECT * FROM aton WHERE status='PA'";
 
-var sqlFacStatusFA = "SELECT * FROM facilities WHERE status='FA'";
-var sqlFacStatusNA = "SELECT * FROM facilities WHERE status='NA'";
-var sqlFacStatusPA = "SELECT * FROM facilities WHERE status='PA'";
+var sqlFacStatusFA = "SELECT * FROM facilities WHERE status='Active'";
+var sqlFacStatusNA = "SELECT * FROM facilities WHERE status='Inactive'";
+var sqlFacStatusPA = "SELECT * FROM facilities WHERE status='Intermittent'";
 
 //Global variables
 var aton = null;
@@ -330,7 +330,7 @@ function showFacStatusPA(){
         '<b>'+'Summary: '+'</b>' + feature.properties.summary + '</em></p>');
         layer.cartodb_id=feature.properties.cartodb_id;
         var facilityYellowIcon = new L.Icon({
-                iconSize: [15, 15],
+                iconSize: [20, 20],
                 iconAnchor: [0, 0],
                 popupAnchor:  [1, -24],
                 iconUrl: 'img/facility_yellow.png'
@@ -505,22 +505,6 @@ function stopEdits(){
   controlOnMap = false;
 };
 
-// Function to add the draw control to the map to start editing
-//function startEditsATON(){
-//  if(controlOnMap == true){
-//    map.removeControl(drawControl);
-//    controlOnMap = false;
-//  }
-//  map.addControl(drawControl);
-//  controlOnMap = true;
-//};
-//
-//// Function to remove the draw control from the map
-//function stopEditsATON(){
-//  map.removeControl(drawControl);
-//  controlOnMap = false;
-//};
-
 // Function to run when feature is drawn on map
 map.on('draw:created', function (e) {
   var layer = e.layer;
@@ -534,6 +518,9 @@ map.on('draw:created', function (e) {
             break;
         case 'pol':
             polReportDialog.dialog("open");
+            break;
+        case 'fac':
+            facReportDialog.dialog("open");
             break;
         default:
             return;
@@ -588,7 +575,28 @@ var atonReportDialog = $("#aton-report_dialog").dialog({
     }
 });
 
-
+var facReportDialog = $("#fac-report_dialog").dialog({
+    autoOpen: false,
+    height: 300,
+    width: 300,
+    modal: true,
+    position: {
+        my: "center center",
+        at: "center center",
+        of: "#map"
+    },
+   buttons: {
+       "Add to Database": setDataFac,
+       Cancel: function() {
+           facReportDialog.dialog("close");
+       
+       }
+   },
+    close: function () {
+        $("#fac-report_form")[0].reset();
+        map.removeLayer(drawnItems);
+    }
+});
 // Stops default form submission and ensures that setData or the cancel function run
 var form = polReportDialog.find("form").on("submit", function(event) {
   event.preventDefault();
@@ -613,7 +621,7 @@ function setDataPol() {
         var a = layer.getLatLng();
         var postSQL = "INSERT INTO mep (the_geom, name, target_div, team, location, description, oil_hazmat, actual_pot, quantity, status, resources, area_conce, operational, latitude, longitude) VALUES (ST_GeomFromText('POINT(" + a.lng + " " + a.lat + ")',4326)," + "'"+ mepName +"'"+","+"'"+ mepDivsion  +"'"+","+"'"+ mepTeam +"'"+","+"'"+ mepLocation +"'"+","+"'"+ mepDescription +"'"+","+"'"+ mepProduct +"'"+ ","+"'"+ mepPotential +"'"+","+"'" + mepQuantity +"'"+","+"'"+ mepStatus +"'"+","+"'"+ mepResources +"'"+","+"'"+ mepAreaConcern +"'"+","+"'"+ mepOpRisk +"'"+","+"'"+ a.lat +"'"+","+"'"+ a.lng +"')";
         var pURL = postSQL;
-        postURL = "https://"+cartoDBUserName+".carto.com/api/v2/sql?q=" + pURL + "&api_key=RlncOhycG7l-UeqxOam90w";
+        postURL = "https://"+cartoDBUserName+".carto.com/api/v2/sql?q=" + pURL + "&api_key=29PQZGsvhRewQ-lIx5M9yw";
             $.post(postURL)        
         console.log(postURL);
         
@@ -634,7 +642,7 @@ function setDataATON() {
         var a = layer.getLatLng();
         var postSQLaton = "INSERT INTO aton (the_geom, name, summary, status, latitude, longitude) VALUES (ST_GeomFromText('POINT(" + a.lng + " " + a.lat + ")',4326)," +"'"+ atonName +"'"+","+"'"+ atonSummary  +"'"+","+"'"+ atonStatus +"'"+","+"'"+ a.lat +"'"+","+"'"+ a.lng +"')";
         var pURLaton = postSQLaton; 
-        postURLaton = "https://"+cartoDBUserName+".carto.com/api/v2/sql?q=" + pURLaton + "&api_key=RlncOhycG7l-UeqxOam90w";
+        postURLaton = "https://"+cartoDBUserName+".carto.com/api/v2/sql?q=" + pURLaton + "&api_key=29PQZGsvhRewQ-lIx5M9yw";
             $.post(postURLaton)        
         console.log(postURLaton);
         
@@ -646,48 +654,36 @@ function setDataATON() {
 }
 
 //set parameters to post to db
-//function setDataFac() {
-//    var facName = document.getElementById("fac_name").value;
-//    var facSummary = document.getElementById("fac_summary").value;
-//    var facStatus = document.getElementById("fac_status").value;
-//    drawnItems.eachLayer(function (layer) {
-//        var postSQLfac = "INSERT INTO aton (the_geom, name, summary, status, latitude, longitude) VALUES (ST_SetSRID(ST_GeomFromGeoJSON('";
-//        var a = layer.getLatLng();
-//        var postSQL2fac = '{"type":"Point","coordinates":[' + a.lng + "," + a.lat + "]}'),4326),'" +"'"+ facName +"'"+","+"'"+ facSummary  +"'"+","+"'"+ facStatus +"'"+","+"'"+ a.lat +"'"+","+"'"+ a.lng +"')";
-//        var pURLfac = postSQLfac + postSQL2fac;
-//        submitToProxy(pURLfac); 
-//        console.log("Feature has been submitted to the Proxy");
-//        
-//    });
-//    map.removeLayer(drawnItems);
-//    drawnItems = new L.FeatureGroup();
-//    console.log("drawnItems has been cleared");
-//    dialog.dialog("close");
-//}
+function setDataFac() {
+    var facName = document.getElementById("fac_name").value;
+    var facSummary = document.getElementById("fac_summary").value;
+    var facStatus = document.getElementById("fac_status").value;
+    drawnItems.eachLayer(function (layer) {
+        var a = layer.getLatLng();
+        var postSQLfac = "INSERT INTO facilities (the_geom, name, summary, status, latitude, longitude) VALUES (ST_GeomFromText('POINT(" + a.lng + " " + a.lat + ")',4326)," +"'"+ facName +"'"+","+"'"+ facSummary  +"'"+","+"'"+ facStatus +"'"+","+"'"+ a.lat +"'"+","+"'"+ a.lng +"')";
+        var pURLfac = postSQLfac;
+        postURLfac = "https://"+cartoDBUserName+".carto.com/api/v2/sql?q=" + pURLfac + "&api_key=29PQZGsvhRewQ-lIx5M9yw";
+            $.post(postURLfac)        
+        console.log(postURLfac);
+        
+    });
+    map.removeLayer(drawnItems);
+    drawnItems = new L.FeatureGroup();
+    console.log("drawnItems has been cleared");
+    facReportDialog.dialog("close");
+}
 
-// Submit data to the PHP using a jQuery Post method
-//var submitToProxy = function(q){
-//  $.post("C:/MAMP/htdocs/PracticumGeog778_CarlosCrespo/php/callProxy.php", { // <--- Enter the path to your callProxy.php file here
-//    qurl:q,
-//    cache: false,
-//    timeStamp: new Date().getTime()
-//  }, function(data) {
-//    console.log(data);
-//    refreshLayer();
-//  });
-//};
-//
-//// refresh the layers to show the updated dataset
-//function refreshLayer() {
-//  if (map.hasLayer(mep)) {
-//    map.removeLayer(mep);
-//  };
-//  getGeoJSON();
-//};
-
-//$(document).ready(function() {
-//    showFacilities(),
-//    showBoundary(),
-//    showPollution(),
-//    showATON()
-//});
+// function to clear radio buttons
+var allRadios = document.getElementsByName('filter');
+var booRadio;
+var x = 0;
+for(x = 0; x < allRadios.length; x++){
+  allRadios[x].onclick = function() {
+    if(booRadio == this){
+      this.checked = false;
+      booRadio = null;
+    } else {
+      booRadio = this;
+    }
+  };
+}
